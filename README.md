@@ -1,3 +1,5 @@
+
+
 # Labs CCNA – Repositório de Prática
 
 Este repositório reúne laboratórios práticos que utilizo para estudar e revisar os tópicos exigidos na certificação Cisco CCNA. A ideia é centralizar materiais de diferentes fontes confiáveis em um único lugar, oferecendo opções variadas para praticar habilidades de switching, routing e serviços de rede.
@@ -165,8 +167,8 @@ Endereçamento IPv4/IPv6, DHCP, NAT/PAT, links seriais (HDLC, PPP, Frame Relay),
 Exemplo de clonagem:
 
 ```bash
-git clone https://github.com/bl4cktux89/labs-ccna.git
-cd labs-ccna
+git clone https://github.com/badntwrkngnr/labs-cisco.git
+cd labs-cisco
 ```
 
 ### Importando um Lab no PNETLab/EVE-NG
