@@ -1,21 +1,37 @@
+# Networking Labs – Repositório de Prática de Redes
 
+Este repositório reúne laboratórios práticos de redes de computadores que utilizo para estudar, revisar e documentar tópicos fundamentais de networking: CLI e administração de dispositivos, switching, roteamento, serviços IP e segurança. A ideia é centralizar materiais de diferentes fontes confiáveis em um único lugar, com roteiros, topologias e soluções de referência para praticar de forma estruturada.
 
-# Labs CCNA – Repositório de Prática
+Os laboratórios atuais foram construídos a partir de conteúdos voltados à certificação Cisco CCNA e utilizam Cisco IOS, mas os conceitos trabalhados (VLANs, STP, OSPF, NAT, ACLs, IPv6, etc.) são universais e aplicáveis a qualquer ambiente de redes. O objetivo do repositório é crescer para além de um único fabricante, passando a cobrir novos temas, plataformas e cenários de automação.
 
-Este repositório reúne laboratórios práticos que utilizo para estudar e revisar os tópicos exigidos na certificação Cisco CCNA. A ideia é centralizar materiais de diferentes fontes confiáveis em um único lugar, oferecendo opções variadas para praticar habilidades de switching, routing e serviços de rede.
+## Para quem é este repositório
+
+- Quem estuda para certificações de redes (como a CCNA) e quer praticar com labs prontos.
+- Profissionais que querem revisar fundamentos de redes de forma prática.
+- Quem está migrando de áreas adjacentes (infraestrutura, desenvolvimento, cloud) e precisa construir base sólida em networking.
 
 ## Servidor do Discord
 
-Também criei um servidor no discord, para quem quiser participar ou ajudar: [NetworkLabs](https://discord.gg/VTpuvYmp)
+Também criei um servidor no Discord, para quem quiser participar ou ajudar: [NetworkLabs](https://discord.gg/VTpuvYmp)
 
 ## Fontes dos Laboratórios
 
 - **[CertSkills](https://www.certskills.com)**
-- **[Packet Tracer Network](https://www.packettracernetwork.com)**
 - **[Jeremy's IT Lab](https://www.jeremysitlab.com)**
 - **[Workshops do Gustavo Kalau](https://www.youtube.com/@GustavoKalau/playlists)**
 
 Observação: Este repositório organiza e referencia materiais para estudo. Respeite as licenças/termos de uso originais dos autores e cursos.
+
+## Visão Geral dos Temas
+
+| Pasta | Tema | Principais assuntos |
+| --- | --- | --- |
+| `01-cli-basics/` | Fundamentos de CLI | Configuração básica de switches e roteadores, senhas, SSH/Telnet |
+| `02-switching-layer2/` | Switching e Camada 2 | VLANs, trunking, STP/RSTP, VTP, EtherChannel, switching L3 |
+| `03-static-routing/` | Roteamento Estático | Rotas estáticas IPv4/IPv6 e troubleshooting |
+| `04-dynamic-routing/` | Roteamento Dinâmico | OSPF, RIP |
+| `05-ip-services/` | Serviços IP | Endereçamento IPv4/IPv6, DHCP, NAT/PAT, NTP, Syslog, CDP/LLDP, links seriais |
+| `06-basic-security/` | Segurança Básica | ACLs, Port Security, DHCP Snooping, DAI |
 
 ## Estrutura do Repositório
 
@@ -27,7 +43,7 @@ Os laboratórios estão organizados por temas para facilitar o estudo. Cada dire
 
 ### 📁 Organização por Temas
 
-#### `cli-basics/` - Fundamentos de CLI
+#### `01-cli-basics/` - Fundamentos de CLI
 
 Configurações básicas de switches e roteadores, segurança de acesso CLI, SSH/Telnet, e exploração de comandos.
 
@@ -48,7 +64,7 @@ Configurações básicas de switches e roteadores, segurança de acesso CLI, SSH
 - `15_config-lab_telnet-config/`
 - `16_config-lab_ssh-config/`
 
-#### `switching-layer2/` - Switching e Protocolos de Camada 2
+#### `02-switching-layer2/` - Switching e Protocolos de Camada 2
 
 VLANs, trunking, STP/RSTP, VTP, EtherChannel (L2 e L3), e troubleshooting de switching.
 
@@ -74,7 +90,7 @@ VLANs, trunking, STP/RSTP, VTP, EtherChannel (L2 e L3), e troubleshooting de swi
 - `20_config-lab_layer3-switching-with-routed-ports/`
 - `21_config-lab_l3-etherchannel-1/`
 
-#### `static-routing/` - Roteamento Estático
+#### `03-static-routing/` - Roteamento Estático
 
 Configuração de rotas estáticas IPv4 e IPv6, e troubleshooting de roteamento.
 
@@ -87,7 +103,7 @@ Configuração de rotas estáticas IPv4 e IPv6, e troubleshooting de roteamento.
 - `07_config-lab_ipv6-static-routes-2/`
 - `08_config-lab_ipv4-static-routes-practice-exam-question-1/`
 
-#### `dynamic-routing/` - Roteamento Dinâmico
+#### `04-dynamic-routing/` - Roteamento Dinâmico
 
 Configuração e otimização de protocolos de roteamento dinâmico como OSPF e RIP.
 
@@ -103,24 +119,7 @@ Configuração e otimização de protocolos de roteamento dinâmico como OSPF e 
 - `10_config-lab_ospf-router-ids/`
 - `11_config-lab_ospf-metrics/`
 
-#### `basic-security/` - Segurança Básica
-
-ACLs (padrão e estendidas), Port Security, DHCP Snooping, DAI e outras técnicas de segurança de camada 2.
-
-- `01_port-security/`
-- `02_config-lab_standard-numbered-acl-1/`
-- `03_config-lab_standard-named-acl-1/`
-- `04_config-lab_extended-numbered-acl-1/`
-- `05_config-lab_extended-named-acl-1/`
-- `06_config-lab_basic-port-security-1/`
-- `07_config-lab_basic-port-security-2/`
-- `08_config-lab_basic-port-security-3/`
-- `09_config-lab_basic-port-security-4/`
-- `10_config-lab_dhcp-snooping-1/`
-- `11_config-lab_dhcp-snooping-2/`
-- `12_config-lab_dai-1/`
-
-#### `ip-services/` - Serviços IP
+#### `05-ip-services/` - Serviços IP
 
 Endereçamento IPv4/IPv6, DHCP, NAT/PAT, links seriais (HDLC, PPP, Frame Relay), NTP, Syslog, e protocolos de descoberta (CDP/LLDP).
 
@@ -149,16 +148,34 @@ Endereçamento IPv4/IPv6, DHCP, NAT/PAT, links seriais (HDLC, PPP, Frame Relay),
 - `23_config-lab_interface-pat-1/`
 - `24_config-lab_pat-with-a-pool-1/`
 
+#### `06-basic-security/` - Segurança Básica
+
+ACLs (padrão e estendidas), Port Security, DHCP Snooping, DAI e outras técnicas de segurança de camada 2.
+
+- `01_port-security/`
+- `02_config-lab_standard-numbered-acl-1/`
+- `03_config-lab_standard-named-acl-1/`
+- `04_config-lab_extended-numbered-acl-1/`
+- `05_config-lab_extended-named-acl-1/`
+- `06_config-lab_basic-port-security-1/`
+- `07_config-lab_basic-port-security-2/`
+- `08_config-lab_basic-port-security-3/`
+- `09_config-lab_basic-port-security-4/`
+- `10_config-lab_dhcp-snooping-1/`
+- `11_config-lab_dhcp-snooping-2/`
+- `12_config-lab_dai-1/`
+
 ## Pré-requisitos
 
-- PNETLab ou EVE-NG
-- Conhecimentos básicos de CLI Cisco IOS.
+- PNETLab ou EVE-NG.
+- Conhecimentos básicos de redes (modelo OSI/TCP-IP, endereçamento IP).
+- Noções de CLI. Os laboratórios atuais utilizam Cisco IOS; novos laboratórios poderão utilizar outras plataformas, que serão indicadas no `instructions.md` de cada lab.
 
 ## Como Usar
 
 1. Clone o repositório.
-2. Navegue até o tema desejado (ex.: `cli-basics/`, `switching-layer2/`, etc.).
-3. Escolha um diretório de lab (ex.: `cli-basics/02_basic-switch-setup/`).
+2. Navegue até o tema desejado (ex.: `01-cli-basics/`, `02-switching-layer2/`, etc.).
+3. Escolha um diretório de lab (ex.: `01-cli-basics/02_basic-switch-setup/`).
 4. Leia o `instructions.md` para entender objetivos e passos.
 5. Abra a topologia correspondente na ferramenta (geralmente arquivos em `assets/lab/` → `.zip` contendo `.unl`).
 6. Execute as configurações conforme o roteiro.
@@ -166,9 +183,9 @@ Endereçamento IPv4/IPv6, DHCP, NAT/PAT, links seriais (HDLC, PPP, Frame Relay),
 
 Exemplo de clonagem:
 
-```bash
-git clone https://github.com/badntwrkngnr/labs-cisco.git
-cd labs-cisco
+```
+git clone https://github.com/badntwrkngnr/networking-labs.git
+cd networking-labs
 ```
 
 ### Importando um Lab no PNETLab/EVE-NG
@@ -247,14 +264,17 @@ show running-config
 
 ## Boas Práticas de Estudo
 
-- **Refaça**
-- **Varie**
-- **Documente**
+- **Refaça**: repita o lab sem olhar a solução até dominar o procedimento.
+- **Varie**: altere endereçamento, topologia e parâmetros para testar sua compreensão.
+- **Documente**: registre comandos, resultados de verificação e aprendizados.
 
 ## Roadmap (ideias futuras)
 
 - Incluir checklists de verificação (show commands) por tópico.
 - Adicionar mais laboratórios de troubleshooting avançado.
+- Expandir o conteúdo para além do Cisco IOS, com labs em outras plataformas e fabricantes.
+- Adicionar novos temas, como BGP, redes em datacenter, VPNs, QoS e wireless.
+- Incluir laboratórios de automação de redes (Python, Ansible, APIs) aplicados aos cenários já existentes.
 
 ## Contribuição
 
