@@ -1,0 +1,36 @@
+name: basic-switch-configuration
+
+prefix: ""
+
+topology:
+  nodes:
+    r1:
+      kind: cisco_iol
+      image: vrnetlab/cisco_iol:17.18.02
+    sw1:
+      kind: cisco_iol
+      image: vrnetlab/cisco_iol:l2-17.18.02
+      type: l2
+    pc1:
+      kind: linux
+      image: wbitt/network-multitool:alpine-extra
+      exec:
+        - ip link set eth1 up
+        - ip addr add 192.168.0.13/24 dev eth1
+    pc2:
+      kind: linux
+      image: wbitt/network-multitool:alpine-extra
+      exec:
+        - ip link set eth1 up
+        - ip addr add 192.168.0.14/24 dev eth1
+    pc3:
+      kind: linux
+      image: wbitt/network-multitool:alpine-extra
+      exec:
+        - ip link set eth1 up
+        - ip addr add 192.168.0.15/24 dev eth1
+  links:
+    - endpoints: [ "r1:eth1", "sw1:eth1" ]
+    - endpoints: [ "sw1:eth2", "pc1:eth1" ]
+    - endpoints: [ "sw1:eth3", "pc2:eth1" ]
+    - endpoints: [ "sw1:eth4", "pc3:eth1" ]
