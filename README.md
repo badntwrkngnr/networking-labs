@@ -4,6 +4,8 @@ Este repositório reúne laboratórios práticos de redes de computadores que ut
 
 Os laboratórios atuais foram construídos a partir de conteúdos voltados à certificação Cisco CCNA e utilizam Cisco IOS, mas os conceitos trabalhados (VLANs, STP, OSPF, NAT, ACLs, IPv6, etc.) são universais e aplicáveis a qualquer ambiente de redes. O objetivo do repositório é crescer para além de um único fabricante, passando a cobrir novos temas, plataformas e cenários de automação.
 
+Os laboratórios podem ser executados em **PNETLab/EVE-NG** (arquivos `.zip` com a topologia `.unl`) e, nos labs que já possuem topologia compatível, também no **[Containerlab](https://containerlab.dev)** (arquivos `.clab.yml`). Veja as instruções de cada ferramenta na seção [Como Usar](#como-usar).
+
 ## Para quem é este repositório
 
 - Quem estuda para certificações de redes (como a CCNA) e quer praticar com labs prontos.
@@ -167,7 +169,7 @@ ACLs (padrão e estendidas), Port Security, DHCP Snooping, DAI e outras técnica
 
 ## Pré-requisitos
 
-- PNETLab ou EVE-NG.
+- PNETLab ou EVE-NG **ou** Containerlab (veja os requisitos específicos em [Executando um Lab no Containerlab](#executando-um-lab-no-containerlab)).
 - Conhecimentos básicos de redes (modelo OSI/TCP-IP, endereçamento IP).
 - Noções de CLI. Os laboratórios atuais utilizam Cisco IOS; novos laboratórios poderão utilizar outras plataformas, que serão indicadas no `instructions.md` de cada lab.
 
@@ -177,7 +179,7 @@ ACLs (padrão e estendidas), Port Security, DHCP Snooping, DAI e outras técnica
 2. Navegue até o tema desejado (ex.: `01-cli-basics/`, `02-switching-layer2/`, etc.).
 3. Escolha um diretório de lab (ex.: `01-cli-basics/02_basic-switch-setup/`).
 4. Leia o `instructions.md` para entender objetivos e passos.
-5. Abra a topologia correspondente na ferramenta (geralmente arquivos em `assets/lab/` → `.zip` contendo `.unl`).
+5. Abra a topologia correspondente na ferramenta (arquivos em `assets/lab/`): o `.zip` contendo `.unl` para PNETLab/EVE-NG, ou o arquivo `.clab.yml` para o Containerlab (quando disponível).
 6. Execute as configurações conforme o roteiro.
 7. Compare seu resultado com o `lab-solution.md` e ajuste o que for necessário.
 
@@ -262,6 +264,130 @@ enable
 show running-config
 ```
 
+### Executando um Lab no Containerlab
+
+Além do PNETLab/EVE-NG, os labs podem ser executados com o [Containerlab](https://containerlab.dev), que sobe os equipamentos como containers Docker a partir de um arquivo `.clab.yml`. Vamos demonstrar como utilizar usando o lab `01-cli-basics/01_basic-switch-configuration` que já possui esse arquivo em `assets/lab/basic-switch-configuration.clab.yml`, e os passos abaixo usam esse lab como exemplo. Para os demais labs o processo é o mesmo, bastando usar o `.clab.yml` da pasta correspondente.
+
+#### Requisitos
+
+- Linux x86_64 (ou WSL2 no Windows) com **Docker** e **Containerlab** instalados. Veja o [guia de instalação](https://containerlab.dev/install/).
+- Permissão de `sudo` (o Containerlab precisa de privilégios para criar as interfaces de rede).
+- Imagens Docker dos equipamentos Cisco IOL, já disponíveis localmente:
+  - `vrnetlab/cisco_iol:17.18.02` (roteador)
+  - `vrnetlab/cisco_iol:l2-17.18.02` (switch L2)
+- A imagem dos "PCs" (`wbitt/network-multitool:alpine-extra`) é baixada automaticamente do Docker Hub.
+
+> **Importante:** as imagens Cisco IOL **não** estão neste repositório e não podem ser redistribuídas. O binário IOL vem do pacote de imagens de referência do Cisco CML e é transformado em imagem Docker com o projeto [vrnetlab](https://github.com/hellt/vrnetlab). O passo a passo está na [documentação do Containerlab](https://containerlab.dev/manual/kinds/cisco_iol/).
+
+#### 1. Confirme que o Docker e o Containerlab estão instalados:
+
+```bash
+docker --version
+containerlab version
+```
+
+#### 2. Confirme que as imagens do Cisco IOL existem no seu Docker:
+
+```bash
+docker images | grep -E "cisco_iol|multitool"
+```
+
+Você deve ver as tags `17.18.02` e `l2-17.18.02`. Se as suas imagens tiverem outra tag (por exemplo `L2-17.12.01`), edite o campo `image:` dos nós no arquivo `.clab.yml`. As tags do Docker diferenciam maiúsculas de minúsculas.
+
+#### 3. Entre na pasta onde está o arquivo `.clab.yml` do lab:
+
+```bash
+cd 01-cli-basics/01_basic-switch-configuration/assets/lab
+```
+
+#### 4. Suba o lab:
+
+```bash
+sudo containerlab deploy -t basic-switch-configuration.clab.yml
+```
+
+O Containerlab cria os containers e as conexões entre eles. O IOL leva alguns minutos para terminar o boot, então aguarde antes de acessar os equipamentos. Ao final, será exibida uma tabela com os nós do lab.
+
+#### 5. Confira se todos os nós estão rodando:
+
+```bash
+sudo containerlab inspect -t basic-switch-configuration.clab.yml
+```
+
+Todos os nós (`r1`, `sw1`, `pc1`, `pc2` e `pc3`) devem aparecer com o estado `running`. A tabela mostra também o endereço IP de gerência de cada nó.
+
+#### 6. Entenda o mapeamento das interfaces:
+
+No Containerlab, a interface `Ethernet0/0` do IOL é reservada para a **gerência** (conectada à rede de gerência do Docker). As interfaces de dados começam em `eth1`, que corresponde a `Ethernet0/1` (`e0/1`). Por isso, os números das interfaces são diferentes da topologia do PNETLab mostrada em `assets/img/topology.png`:
+
+| Conexão | Containerlab | Nome no IOS (Containerlab) | PNETLab (`topology.png`) |
+| --- | --- | --- | --- |
+| R1 ↔ SW1 | `r1:eth1` ↔ `sw1:eth1` | R1 `e0/1` ↔ SW1 `e0/1` | R1 `e0/0` ↔ SW1 `e0/0` |
+| SW1 ↔ PC1 | `sw1:eth2` ↔ `pc1:eth1` | SW1 `e0/2` | SW1 `e0/1` |
+| SW1 ↔ PC2 | `sw1:eth3` ↔ `pc2:eth1` | SW1 `e0/3` | SW1 `e0/2` |
+| SW1 ↔ PC3 | `sw1:eth4` ↔ `pc3:eth1` | SW1 `e0/4` | SW1 `e0/3` |
+
+Os PCs já sobem com endereço IP configurado na `eth1`: `pc1` = `192.168.0.13/24`, `pc2` = `192.168.0.14/24` e `pc3` = `192.168.0.15/24`.
+
+#### 7. Acesse o roteador e o switch via SSH:
+
+```bash
+ssh admin@r1
+ssh admin@sw1
+```
+
+O usuário e a senha padrão são `admin` / `admin`. Os nomes `r1` e `sw1` são os nomes dos containers (o arquivo usa `prefix: ""`). Se o nome não for resolvido, use o endereço IP mostrado no `containerlab inspect`.
+
+> Para acessar o IOS, use sempre o SSH. O comando `docker exec -it r1 bash` abre um shell Linux do container, não a CLI do IOS.
+
+#### 8. Acesse os PCs e teste a conectividade entre eles:
+
+```bash
+docker exec -it pc1 sh
+ip addr show eth1
+ping -c 3 192.168.0.14
+```
+
+Os PCs devem se comunicar através do switch. Se o ping falhar logo após o `deploy`, aguarde o switch terminar de iniciar e tente novamente.
+
+#### 9. Realize o lab:
+
+Abra o `instructions.md` do lab e execute as configurações no `r1` e no `sw1` por SSH. Se o seu usuário já entrar direto no modo EXEC privilegiado, use o comando `disable` para voltar ao modo EXEC usuário antes de testar as senhas dos passos 3 e 8 do lab.
+
+#### 10. Salve a configuração e compare com a solução:
+
+```cisco
+copy running-config startup-config
+```
+
+Depois compare o seu resultado com o `lab-solution.md`.
+
+#### 11. Encerre ou reinicie o lab:
+
+Para desligar o lab **mantendo** as configurações que você salvou:
+
+```bash
+sudo containerlab destroy -t basic-switch-configuration.clab.yml
+```
+
+Para apagar tudo e recomeçar do zero (equivalente ao 'Wipe All Nodes' do PNETLab):
+
+```bash
+sudo containerlab destroy -t basic-switch-configuration.clab.yml --cleanup
+sudo containerlab deploy -t basic-switch-configuration.clab.yml
+```
+
+> O Containerlab cria uma pasta `clab-basic-switch-configuration/` ao lado do `.clab.yml` durante o `deploy`. Ela guarda os dados do lab e não deve ser enviada ao Git (adicione `clab-*/` ao `.gitignore`).
+
+#### Problemas comuns
+
+| Sintoma | O que verificar |
+| --- | --- |
+| `pull access denied` ou imagem não encontrada | A imagem Cisco IOL não existe localmente ou a tag é diferente da usada no `.clab.yml` (passo 2). |
+| `permission denied` ao executar o `containerlab` | Execute com `sudo`. |
+| Sem acesso SSH ao switch (`sw1`) | Aguarde o boot completo e confira se o nó do switch tem `type: L2` no `.clab.yml`, que é o valor usado na documentação do Containerlab para a imagem IOL-L2. |
+| O ping entre os PCs não funciona | Aguarde o boot do switch e confira o IP da `eth1` de cada PC com `ip addr show eth1`. |
+
 ## Boas Práticas de Estudo
 
 - **Refaça**: repita o lab sem olhar a solução até dominar o procedimento.
@@ -275,6 +401,7 @@ show running-config
 - Expandir o conteúdo para além do Cisco IOS, com labs em outras plataformas e fabricantes.
 - Adicionar novos temas, como BGP, redes em datacenter, VPNs, QoS e wireless.
 - Incluir laboratórios de automação de redes (Python, Ansible, APIs) aplicados aos cenários já existentes.
+- Adicionar topologias Containerlab (`.clab.yml`) aos demais laboratórios.
 
 ## Contribuição
 
